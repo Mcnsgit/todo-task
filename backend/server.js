@@ -1,19 +1,42 @@
-require("dotenv").config()
 
-const express = require('express')
-const itemRoutes = require('./routes/items')
-const mongoose = require('mongoose')
-const cors = require('cors')
+// Load environment variables
+require('dotenv').config();
+console.log('Loading environment variables...');
 
-const app = express()
-app.use(cors())
-app.use(express.json()) // parse incomming data
-// routes for requests will always now have '/todos'
-// eg http://localhost:4000/todos/items
-app.use('/todos', itemRoutes)
+// Load Express and configure it
+const express = require('express');
+console.log('Loading Express...');
+const app = express();
+console.log('Express loaded');
 
+// Enable CORS
+console.log('Configuring CORS...');
+const cors = require('cors');
+app.use(cors());
+console.log('CORS configured');
 
-mongoose.connect(process.env.MONGODB_URL)
-// LISTEN ON PORT 4000
-// frontend is running on port 3000
+// Parse JSON requests
+console.log('Configuring JSON parsing middleware...');
+app.use(express.json());
+console.log('JSON parsing middleware configured');
 
+// Load routes
+console.log('Configuring routes...');
+const itemsRoutes = require('./routes/item');
+app.use('/items', itemsRoutes);
+console.log('Routes configured');
+const MONGODB_URI = process.env.MONGODB_URI;
+// Connect to MongoDB
+console.log('Connecting to MongoDB...');
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('Connected to MongoDB');
+    console.log('Starting server...');
+    app.listen(4000, () => {
+      console.log('Server running on port 4000');
+    });
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
