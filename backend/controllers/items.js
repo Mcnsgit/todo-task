@@ -1,71 +1,73 @@
-// handler functions that will be executed 
-
-const Todo = require("../models/todo")
-
-const getTodos = async (req, res) => {
-    // find all items from a mongoose Model method 
-    const items = await Todo.find({})
-    // respond with an object that has a message and the items from the DB
-    res.json({
-        message: "all items",
-        todos: items
-    })
-}
-
-const getTodo = async (req, res) => {
-    // get id from ':id' param from the route (the :id in the route path)
-    const { id } = req.params
-    // find todo with Model.findById()
-    const todo = await Todo.findById(id)
-    // response (res) with .json with the todo found
-    res.status(200).json(todo)
-}
+const Todo = require('../models/todo');
 
 const createTodo = async (req, res) => {
-    // get the text from the req.body
-    const { text } = req.body
+  try {
+    const { text } = req.body;
+    const todoObject = new Todo({ text });
+    const newTodo = await todoObject.save();
+    res.status(201).json(newTodo);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create todo item' });
+  }
+};
 
-    // create new todo object with model
-    const newTodo = new Todo({
-        text: text
-    })
+const getTodos = async (req, res) => {
+  try {
+    const items = await Todo.find({});
+    res.status(200).json({ todos: items });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve todo items' });
+  }
+};
 
-    // await for it to be saved
-    await newTodo.save()
+const getTodo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const todo = await Todo.findById(id);
+    if (!todo) {
+      return res.status(404).json({ error: 'Todo item not found' });
+    }
+    res.status(200).json(todo);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve todo item' });
+  }
+};
 
-    // respond with json()
-    res.status(201).json(newTodo)
-}
-
-const editTodo = async (req, res) => {
-    // get id from ':id' param from the route
-    const { id } = req.params
-    const { text } = req.body
-
-    // use mongoose model method findByIdAndUpdate
+const updateTodo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { text } = req.body;
     const updatedTodo = await Todo.findByIdAndUpdate(
-        id,
-        { text: text },
-        { new: true }
-    )
-
-    res.json(updatedTodo)
-}
+      id,
+      { text },
+      { new: true }
+    );
+    if (!updatedTodo) {
+      return res.status(404).json({ error: 'Todo item not found' });
+    }
+    res.status(200).json(updatedTodo);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update todo item' });
+  }
+};
 
 const deleteTodo = async (req, res) => {
-    // get id from ':id' param from the route
-    const { id } = req.params
-
-    // use mongoose model method findByIdAndDelete
-    await Todo.findByIdAndDelete(id)
-
-    res.json({ message: "Todo deleted" })
-}
+  try {
+    const { id } = req.params;
+    const deletedTodo = await Todo.findByIdAndDelete(id);
+    if (!deletedTodo) {
+      return res.status(404).json({ error: 'Todo item not found' });
+    }
+    res.status(200).json(deletedTodo);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete todo item' });
+  }
+};
 
 module.exports = {
-    createTodo,
-    getTodos,
-    editTodo,
-    deleteTodo,
-    getTodo
-}
+  createTodo,
+  getTodos,
+  getTodo,
+  updateTodo,
+  deleteTodo,
+};
