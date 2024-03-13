@@ -1,7 +1,12 @@
-const API_URL = `http://localhost:4000`
+const API_URL = `http://localhost:4000`;
 
-export const getTodos = async () => {
-    let response = await fetch('http://localhost:4000/todos/items')
-    let data = await response.json()
-    return data.todos
-}
+export const getTodo = async () => {
+    try {
+        const response = await (`${API_URL}/items`);
+        const data = await response.json();
+        return data.todos;
+    } catch (error) {
+        console.error('Error fetching todos:', error);
+        throw error;
+    }
+};

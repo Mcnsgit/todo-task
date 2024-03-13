@@ -2,7 +2,7 @@ const API_URL = `http://localhost:4000`
 
 export const readTodos = async () => {
      try{
-          let response = await fetch(`${API_URL}/todos/items`);
+          let response = await fetch(`${API_URL}/items`);
           if(!response.ok){
                throw new Error(`HTTP error! status: ${response.status}`)
           }
