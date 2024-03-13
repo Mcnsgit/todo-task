@@ -1,18 +1,14 @@
-const API_URL = `http://localhost:4000`
+const API_URL = `http://localhost:4000`;
 
-export const deleteTodo = async (todo) => {
-    // add url which is for delete
-    // add the _id for the ':id' param
-    const response = await fetch(``, {
-        // method type?
-        method: '',
-        // content type?
-        headers: {
-            
-        }
-    })
-    // convert to json
-   
-    // return json
-    return json
-}
+export const deleteTodo = async (id) => {
+    try {
+        const response = await fetch(`${API_URL}/item/${id}`, {
+            method: 'DELETE'
+        });
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error('Error deleting todo:', error);
+        throw error;
+    }
+};
