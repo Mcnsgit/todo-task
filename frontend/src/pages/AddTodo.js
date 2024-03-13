@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { addTodo } from "'../api/addTodo"
+import { addTodo } from "../api/addTodo";
 const AddTodo = () => {
 
     const [userInput, setUserInput] = useState("")
@@ -19,7 +19,7 @@ const AddTodo = () => {
                 <input 
                 type="text"
                     value={userInput}
-                    onChange={(e) => setUserInputtUserInput (e.target.vaule)}
+                    onChange={(e) => setUserInput (e.target.value)}
                 />
                 <button type="submit">submit</button>
             </form>
