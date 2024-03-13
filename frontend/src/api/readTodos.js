@@ -1,6 +1,7 @@
-const API_URL = `http://localhost:4000`
+const API_URL = `http://localhost:4000`;
 
 export const readTodos = async () => {
+
      try{
           let response = await fetch(`${API_URL}/todos/items`);
           if(!response.ok){
