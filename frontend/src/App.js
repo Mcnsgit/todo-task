@@ -15,6 +15,7 @@ const App = () => {
           <Route  path='/add-todo' element={<AddTodo />} />
           <Route path='/edit/:id' element={<EditTodo />} />
         </Routes>
+        
 
       </BrowserRouter>
     </div>
