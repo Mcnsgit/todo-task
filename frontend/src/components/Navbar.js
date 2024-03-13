@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom'
+import AddTodo from '../pages/AddTodo'
 
 const Navbar = () => {
+    const handleAddTodo = () => {
+        AddTodo()
+    }
+
     return (
         <div>
             <header>
@@ -8,7 +13,7 @@ const Navbar = () => {
                     <Link to='/'>
                         my list
                     </Link>
-                    <Link to='/add-todo'>
+                    <Link to='/addtodo' onClick={handleAddTodo}>
                         add item
                     </Link>
                 </div>
