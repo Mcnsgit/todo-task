@@ -1,13 +1,16 @@
 import { useState } from "react"
-import { addTodo } from "../api/addTodo";
-const AddTodo = () => {
+import { useNavigate } from "react-router-dom"
+import { addTodo } from "../api/addTodo"
 
+
+const AddTodo = () => {
     const [userInput, setUserInput] = useState("")
+    const navigate = useNavigate()
 
     const handler = async (e) => {
         e.preventDefault()
-        let response = await addTodo(userInput)
-        console.log(response)
+        await addTodo(userInput)
+        navigate("/")
     }
 
     return (
