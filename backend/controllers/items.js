@@ -1,15 +1,38 @@
-const Todo = require('../models/todo');
+
+
+
+const TodoSchema = require("../models/todo")
+
+
+const getTodo = async (req, res) => {
+    // get id from ':id' param from the route (the :id in the route path)
+    const { id } = req.params;
+    console.log(`Fetching todo with id: ${id}`);
+    // find todo with Model.findById()
+    const todo = await TodoSchema.findById(id);
+    if (!todo) {
+        return res.status(404).json({ message: 'Todo not found' });
+    }
+    // response (res) with .json with the todo found
+    res.status(200).json(todo);
+  }
 
 const createTodo = async (req, res) => {
-  try {
     const { text } = req.body;
-    const todoObject = new Todo({ text });
-    const newTodo = await todoObject.save();
-    res.status(201).json(newTodo);
-  } catch (error) {
+    // create new todo object with model
+    const todo = new TodoSchema({ text });
+    // await for it to be saved
+    await todo.save();
+    // respond with json()
+    res.status(201).json(todo);
+}    catch (error) {
     res.status(500).json({ error: 'Failed to create todo item' });
   }
 };
+
+
+
+
 
 const getTodos = async (req, res) => {
   try {
@@ -33,11 +56,11 @@ const getTodo = async (req, res) => {
   }
 };
 
-const updateTodo = async (req, res) => {
+const editTodo = async (req, res) => {
   try {
     const { id } = req.params;
     const { text } = req.body;
-    const updatedTodo = await Todo.findByIdAndUpdate(
+    const updatedTodo = await TodoSchema.findByIdAndUpdate(
       id,
       { text },
       { new: true }
@@ -50,6 +73,7 @@ const updateTodo = async (req, res) => {
     res.status(500).json({ error: 'Failed to update todo item' });
   }
 };
+
 
 const deleteTodo = async (req, res) => {
   try {
@@ -68,6 +92,6 @@ module.exports = {
   createTodo,
   getTodos,
   getTodo,
-  updateTodo,
+  editTodo,
   deleteTodo,
 };
