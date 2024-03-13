@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useState, useEffect } from 'react'
 import { getTodo } from "../api/getTodo"
 import { updateTodo } from "../api/updateTodo"
+
 const EditTodo = () => {
 
     const { id } = useParams()
@@ -14,6 +15,7 @@ const EditTodo = () => {
             text: userInput
         }
 
+        await updateTodo(obj);
         alert('edited item')
     }
 
@@ -23,13 +25,16 @@ const EditTodo = () => {
             setToUpdate(data)
         }
         fetchTodo()
-    },[])
+    },[ id ])
+
     return (
         <div>
             <h1>edit</h1>
             <h2>{toUpdate.text}</h2>
             <input 
-                onChange={() => {}}
+            type="text"
+            value={userInput}
+             onChange={(e) => setUserInput(e.target.value)}
             />
             <button onClick={submitHandler}>submit</button>
         </div>
