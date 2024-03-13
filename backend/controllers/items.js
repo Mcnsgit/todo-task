@@ -4,20 +4,9 @@
 const TodoSchema = require("../models/todo")
 
 
-const getTodo = async (req, res) => {
-    // get id from ':id' param from the route (the :id in the route path)
-    const { id } = req.params;
-    console.log(`Fetching todo with id: ${id}`);
-    // find todo with Model.findById()
-    const todo = await TodoSchema.findById(id);
-    if (!todo) {
-        return res.status(404).json({ message: 'Todo not found' });
-    }
-    // response (res) with .json with the todo found
-    res.status(200).json(todo);
-  }
 
 const createTodo = async (req, res) => {
+  try {
     const { text } = req.body;
     // create new todo object with model
     const todo = new TodoSchema({ text });
@@ -25,7 +14,8 @@ const createTodo = async (req, res) => {
     await todo.save();
     // respond with json()
     res.status(201).json(todo);
-}    catch (error) {
+  }
+    catch(error) {
     res.status(500).json({ error: 'Failed to create todo item' });
   }
 };
@@ -35,12 +25,9 @@ const createTodo = async (req, res) => {
 
 
 const getTodos = async (req, res) => {
-  try {
-    const items = await Todo.find({});
+    const items = await TodoSchema.find({});
     res.status(200).json({ todos: items });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve todo items' });
-  }
+   
 };
 
 const getTodo = async (req, res) => {
